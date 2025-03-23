@@ -1,6 +1,6 @@
 ## DASHBOARD BACKEND
 
-Se hace uso de NEST, un framework de Node.js, con 
+Se hace uso de NEST, un framework de Node.js, hace uso de Prisma como ORM, para la conexión con la base de datos PostgreSQL. Con la ventaja de que mapea los modelos de TypeScript al esquema de base de datos, permite la creacion, lectura, actualización y eliminación de datos usando código TypeScript sin escribir SQL directamente.
 
 ## Instalación rapida
 
