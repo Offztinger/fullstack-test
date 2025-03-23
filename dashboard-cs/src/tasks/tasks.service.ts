@@ -8,49 +8,55 @@ import { CreateTaskDto } from './dto';
 export class TasksService {
   constructor(private prisma: PrismaService) { }
 
-  async create(dto: CreateTaskDto, userId: string) {
-    return this.prisma.task.create({
+  async create(dto: CreateTaskDto, user_id: string) {
+    return this.prisma.tasks.create({
       data: {
         title: dto.title,
         description: dto.description,
         status: dto.status,
         user: {
-          connect: { id: userId },
+          connect: { id: user_id },
         },
       },
     });
   }
 
-  findAll(userId: string) {
-    return this.prisma.task.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
+  findAll(user_id: string) {
+    return this.prisma.tasks.findMany({
+      where: {
+        user_id: user_id,
+        deleted_at: null
+      },
+      orderBy: { created_at: 'desc' },
     });
   }
 
   findOne(id: string) {
-    return this.prisma.task.findUnique({ where: { id } });
+    return this.prisma.tasks.findUnique({ where: { id: id, deleted_at: null } });
   }
 
-  update(id: string, data: Prisma.TaskUpdateInput) {
-    return this.prisma.task.update({
-      where: { id },
+  update(id: string, data: Prisma.tasksUpdateInput) {
+    return this.prisma.tasks.update({
+      where: { id: id, deleted_at: null },
       data,
     });
   }
 
   async markAsCompleted(id: string) {
-    return this.prisma.task.update({
-      where: { id },
+    return this.prisma.tasks.update({
+      where: { id: id, deleted_at: null },
       data: {
         status: 'COMPLETED',
-        completedAt: new Date(),
+        completed_at: new Date(),
       },
     });
   }
-  
 
-  remove(id: string) {
-    return this.prisma.task.delete({ where: { id } });
+
+  async remove(id: string) {
+    return this.prisma.tasks.update({
+      where: { id },
+      data: { deleted_at: new Date() },
+    });
   }
 }

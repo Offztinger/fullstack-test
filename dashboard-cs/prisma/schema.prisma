@@ -7,41 +7,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String      @id @default(uuid())
-  email    String      @unique
+model users {
+  id       String        @id @default(uuid())
+  email    String        @unique
   password String
-  tasks    Task[]
-  logins   UserLogin[] 
+  tasks    tasks[]
+  logins   users_login[]
 }
 
-model UserLogin {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  timestamp DateTime @default(now())
-  ip        String?
-  userAgent String?
+model users_login {
+  id         String   @id @default(uuid())
+  user_id    String
+  user       users    @relation(fields: [user_id], references: [id])
+  timestamp  DateTime @default(now())
+  ip         String?
+  user_agent String?
 
-  @@index([userId])
+  @@index([user_id])
 }
 
-model Task {
-  id          String     @id @default(uuid())
-  title       String
-  description String?
-  status      TaskStatus @default(PENDING)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  completedAt DateTime?
-  userId      String
-  user        User       @relation(fields: [userId], references: [id])
+model tasks {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  status       tasks_status   @default(PENDING)
+  category     tasks_category @default(OTHER)
+  created_at   DateTime       @default(now())
+  updated_at   DateTime?      @updatedAt
+  completed_at DateTime?
+  deleted_at   DateTime?
+  user_id      String
+  user         users          @relation(fields: [user_id], references: [id])
 
-  @@index([userId])
+  @@index([user_id])
 }
 
-enum TaskStatus {
+enum tasks_status {
   PENDING
   IN_PROGRESS
   COMPLETED
+}
+
+enum tasks_category {
+  WORK
+  PERSONAL
+  STUDY
+  HEALTH
+  OTHER
 }

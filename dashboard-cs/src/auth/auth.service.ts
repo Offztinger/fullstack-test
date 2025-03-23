@@ -10,7 +10,7 @@ export class AuthService {
 
   async register(email: string, password: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.prisma.user.create({
+    const user = await this.prisma.users.create({
       data: { email, password: hashedPassword },
     });
 
@@ -18,17 +18,17 @@ export class AuthService {
   }
 
   async login(email: string, password: string, req: Request) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.users.findUnique({ where: { email } });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
 
-    await this.prisma.userLogin.create({
+    await this.prisma.users_login.create({
       data: {
-        userId: user.id,
+        user_id: user.id,
         ip: req.ip,
-        userAgent: req.headers['user-agent'],
+        user_agent: req.headers['user-agent'],
       },
     });
 
