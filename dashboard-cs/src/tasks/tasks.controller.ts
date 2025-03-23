@@ -19,7 +19,7 @@ export class TasksController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Req() req: RequestWithUser) {
-    return this.tasksService.findAll(req.user.id); 
+    return this.tasksService.findAll(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -32,6 +32,12 @@ export class TasksController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/complete')
+  markAsCompleted(@Param('id') id: string) {
+    return this.tasksService.markAsCompleted(id);
   }
 
   @UseGuards(JwtAuthGuard)

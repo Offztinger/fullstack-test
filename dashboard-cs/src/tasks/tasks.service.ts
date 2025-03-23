@@ -39,6 +39,17 @@ export class TasksService {
     });
   }
 
+  async markAsCompleted(id: string) {
+    return this.prisma.task.update({
+      where: { id },
+      data: {
+        status: 'COMPLETED',
+        completedAt: new Date(),
+      },
+    });
+  }
+  
+
   remove(id: string) {
     return this.prisma.task.delete({ where: { id } });
   }
