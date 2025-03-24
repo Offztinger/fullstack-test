@@ -21,11 +21,11 @@ const CompletionRate = ({ data }) => {
             startAngle={90}
             endAngle={-270}
           >
-            <Cell fill="#4CAF50" />
+            <Cell fill="#00C49F" />
             <Cell fill="#E0E0E0" />
           </Pie>
         </PieChart>
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-[#4CAF50] font-bold text-xl">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-[#00C49F] font-bold text-xl">
           {data.rate.toFixed(0)}%
         </div>
       </div>
