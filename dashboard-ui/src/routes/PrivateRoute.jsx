@@ -6,9 +6,17 @@ export const PrivateRoute = ({ children }) => {
   const { checkAuth } = useAuth();
   const [isAuth, setIsAuth] = useState(null);
 
+  const redirect = async () => {
+    try {
+      const res = await checkAuth();
+      setIsAuth(res);
+    } catch (error) {
+      setIsAuth(false);
+    }
+  };
+
   useEffect(() => {
-    const result = checkAuth();
-    setIsAuth(result);
+    redirect();
   }, []);
 
   if (isAuth === null) return null;

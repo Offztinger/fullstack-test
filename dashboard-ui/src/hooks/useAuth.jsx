@@ -66,17 +66,18 @@ export const useAuth = () => {
     const storedToken = localStorage.getItem(TOKEN_KEY);
     const expired = !getCookie(EXPIRATION_KEY);
 
-    const res = await fetch(`${url}/auth/profile`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${storedToken}` },
-    });
+    if (storedToken) {
+      const res = await fetch(`${url}/auth/profile`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${storedToken}` },
+      });
 
-    if (!res.ok) {
-      logout();
-      throw new Error("Error al verificar la sesión.");
+      if (!res.ok) {
+        logout();
+        throw new Error("Error al verificar la sesión.");
+      }
+      setUser(await res.json());
     }
-
-    setUser(await res.json());
 
     if (!storedToken || expired) {
       logout();

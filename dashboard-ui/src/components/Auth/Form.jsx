@@ -24,10 +24,6 @@ const Form = () => {
     formState: { errors: signupErrors },
   } = useForm();
 
-  useEffect(() => {
-    console.log("value", switchState);
-  }, [switchState]);
-
   const onLogin = async (data) => {
     try {
       await login(data.email, data.password);
@@ -103,10 +99,6 @@ const Form = () => {
                     type="password"
                     {...registerLogin("password", {
                       required: "No dejes este campo vacío.",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
                     })}
                   />
                   {loginErrors.password && (
@@ -179,6 +171,10 @@ const Form = () => {
                     type="password"
                     {...registerSignup("password", {
                       required: "No dejes este campo vacío.",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
                     })}
                   />
                   {signupErrors.password && (

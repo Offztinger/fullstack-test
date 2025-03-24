@@ -1,3 +1,4 @@
+// src/dashboard/dashboard.controller.ts
 import { Controller, Get, UseGuards, Req } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
@@ -6,7 +7,7 @@ import { RequestWithUser } from 'src/auth/types/request-with-user';
 @UseGuards(JwtAuthGuard)
 @Controller('dashboard')
 export class DashboardController {
-  constructor(private readonly dashboardService: DashboardService) { }
+  constructor(private readonly dashboardService: DashboardService) {}
 
   @Get('summary')
   getSummary(@Req() req: RequestWithUser) {
@@ -18,11 +19,10 @@ export class DashboardController {
     return this.dashboardService.getAbandonmentRate(req.user.id);
   }
 
-  @Get('producitivity-by-day')
+  @Get('productivity-by-day')
   getProductivityByDay(@Req() req: RequestWithUser) {
     return this.dashboardService.getProductivityByDay(req.user.id);
   }
-
 
   @Get('category-average')
   getTasksByCategory(@Req() req: RequestWithUser) {
