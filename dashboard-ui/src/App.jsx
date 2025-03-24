@@ -1,7 +1,10 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { PrivateRoute } from "./routes/PrivateRoute";
 import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard";
+import Tasks from "./routes/Tasks";
+import Layout from "./components/shared/Layout";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -11,15 +14,20 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <PrivateRoute>
-                <Dashboard />
+                <Layout />
               </PrivateRoute>
             }
-          />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          >
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="tasks" element={<Tasks />} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>
     </main>
