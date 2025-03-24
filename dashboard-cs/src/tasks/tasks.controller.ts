@@ -3,13 +3,14 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
+import { UpdateStatusDto } from './dto/update-status.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
 
- 
+
   @Post()
   create(@Body() dto: CreateTaskDto, @Req() req: RequestWithUser) {
     const userId = req.user.id;
@@ -29,6 +30,11 @@ export class TasksController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
+  }
+
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body() body: UpdateStatusDto) {
+    return this.tasksService.updateStatus(id, body.status);
   }
 
   @Patch(':id/complete')

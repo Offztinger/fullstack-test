@@ -42,6 +42,16 @@ export class TasksService {
     });
   }
 
+  async updateStatus(id: string, status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED') {
+    return this.prisma.tasks.update({
+      where: { id: id, deleted_at: null },
+      data: {
+        status,
+        completed_at: status === 'COMPLETED' ? new Date() : null,
+      },
+    });
+  }
+
   async markAsCompleted(id: string) {
     return this.prisma.tasks.update({
       where: { id: id, deleted_at: null },
@@ -51,7 +61,6 @@ export class TasksService {
       },
     });
   }
-
 
   async remove(id: string) {
     return this.prisma.tasks.update({
