@@ -1,12 +1,13 @@
-import { useDashboard } from "../hooks/useDashboard";
-import SummaryCard from "../components/Dashboard/SummaryCard";
-import CategoryAverage from "../components/Dashboard/CategoryAverage";
-import WeeklyTrend from "../components/Dashboard/WeeklyTrend";
+import { useDashboard } from "@/hooks/useDashboard";
+import SummaryCard from "@/components/Dashboard/SummaryCard";
+import CategoryAverage from "@/components/Dashboard/CategoryAverage";
+import WeeklyTrend from "@/components/Dashboard/WeeklyTrend";
+import ProductivityByDay from "@/components/Dashboard/ProductivityByDay";
+import CompletionRate from "@/components/Dashboard/CompletionRate";
+import AverageTime from "@/components/Dashboard/AverageTime";
+import AbandonmentRate from "@/components/Dashboard/AbandonmentRate";
+import DashboardSkeleton from "@/components/Dashboard/DashboardSkeleton";
 import "@/styles/dashboard.css";
-import ProductivityByDay from "../components/Dashboard/ProductivityByDay";
-import CompletionRate from "../components/Dashboard/CompletionRate";
-import AverageTime from "../components/Dashboard/AverageTime";
-import AbandonmentRate from "../components/Dashboard/AbandonmentRate";
 
 const Dashboard = () => {
   const {
@@ -17,7 +18,10 @@ const Dashboard = () => {
     completionRate,
     averageTime,
     abandonmentRate,
+    loading,
   } = useDashboard();
+
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <section className="w-full h-full flex gap-8 flex-col">

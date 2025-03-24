@@ -2,11 +2,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
 import { useDashboardStore } from "../store/useDashboardStore";
+import toast from "react-hot-toast";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const useDashboard = () => {
   const { token, logout } = useAuth();
+
+  const [loading, setLoading] = useState(false);
 
   const {
     summary,
@@ -37,11 +40,21 @@ export const useDashboard = () => {
       throw new Error(`Error fetching ${endpoint}`);
     }
 
-    return res.json();
+    const text = await res.text(); // ← Intentamos obtener el texto de respuesta
+
+    if (!text) return null; // ← Si está vacío, retornamos null
+
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      console.error(`Error parsing JSON for ${endpoint}`, error);
+      return null;
+    }
   };
 
   const fetchDashboardData = async () => {
     try {
+      setLoading(true);
       const [
         summaryRes,
         categoryRes,
@@ -59,6 +72,15 @@ export const useDashboard = () => {
         fetchWithAuth("average-completion"),
         fetchWithAuth("abandonment-rate"),
       ]);
+
+      if (summaryRes) {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      } else {
+        toast.error("Crea tu primera tarea para ver dashboard!");
+        throw new Error("No hay datos para mostrar");
+      }
 
       setSummary(summaryRes);
 
@@ -103,5 +125,6 @@ export const useDashboard = () => {
     completionRate,
     averageTime,
     abandonmentRate,
+    loading,
   };
 };
