@@ -70,16 +70,16 @@ export const useDashboard = () => {
       );
 
       setTrendData(
-        Object.entries(trendRes).map(([week, count]) => ({
+        Object.entries(trendRes).map(([week, completed]) => ({
           week,
-          count,
+          completed,
         }))
       );
 
       setProductivityByDay(
-        Object.entries(productivityRes).map(([day, count]) => ({
+        Object.entries(productivityRes).map(([day, completed]) => ({
           day,
-          count,
+          completed,
         }))
       );
 

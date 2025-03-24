@@ -1,7 +1,12 @@
-import CategoryAverage from "../components/Dashboard/CategoryAverage";
 import { useDashboard } from "../hooks/useDashboard";
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA66CC"];
+import SummaryCard from "../components/Dashboard/SummaryCard";
+import CategoryAverage from "../components/Dashboard/CategoryAverage";
+import WeeklyTrend from "../components/Dashboard/WeeklyTrend";
+import "@/styles/dashboard.css";
+import ProductivityByDay from "../components/Dashboard/ProductivityByDay";
+import CompletionRate from "../components/Dashboard/CompletionRate";
+import AverageTime from "../components/Dashboard/AverageTime";
+import AbandonmentRate from "../components/Dashboard/AbandonmentRate";
 
 const Dashboard = () => {
   const {
@@ -14,25 +19,20 @@ const Dashboard = () => {
     abandonmentRate,
   } = useDashboard();
 
-  if (!summary)
-    return <div className="text-center mt-8">Cargando datos...</div>;
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-      <div>
-        <h2 className="text-xl font-bold mb-4">Resumen</h2>
-        <ul className="list-disc ml-5 space-y-1">
-          <li>Total: {summary.total}</li>
-          <li>Completadas: {summary.completed}</li>
-          <li>En progreso: {summary.progress}</li>
-          <li>Pendientes: {summary.pending}</li>
-          <li>Eliminadas: {summary.deleted}</li>
-          <li>Porcentaje completado: {summary.completionRate}%</li>
-        </ul>
+    <section className="w-full h-full flex gap-8 flex-col">
+      <div className="grid grid-cols-2 gap-8">
+        <SummaryCard data={summary} />
+        <CategoryAverage data={categoryData} />
+        <WeeklyTrend data={trendData} />
+        <ProductivityByDay data={productivityByDay} />
       </div>
-
-      <CategoryAverage categoryData={categoryData} COLORS={COLORS} />
-    </div>
+      <div className="grid grid-cols-3 gap-8 pb-6">
+        <CompletionRate data={completionRate} />
+        <AverageTime data={averageTime} />
+        <AbandonmentRate data={abandonmentRate} />
+      </div>
+    </section>
   );
 };
 

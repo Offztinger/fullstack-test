@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-
+import { toZonedTime } from 'date-fns-tz';
+import { getISOWeek, getISOWeekYear } from "date-fns";
 @Injectable()
 export class DashboardService {
   constructor(private prisma: PrismaService) { }
@@ -51,8 +52,7 @@ export class DashboardService {
     const trend: Record<string, number> = {};
     for (const task of completedTasks) {
       if (!task.completed_at) continue;
-      console.log('taskCompleted: ', task.completed_at);
-      const week = this.getISOWeek(task.completed_at);
+      const week = this.getISOWeekFormatted(task.completed_at);
       trend[week] = (trend[week] || 0) + 1;
     }
 
@@ -182,15 +182,13 @@ export class DashboardService {
     return { total, abandoned, abandonment_rate };
   }
 
-  private getISOWeek(date: Date): string {
-    const adjustedDate = new Date(date.getTime() + 5 * 60 * 60 * 1000);
-    console.log(`date: ${date} | adjustedDate: ${adjustedDate}`);
+  private getISOWeekFormatted(date: Date): string {
+    const zonedDate = toZonedTime(date, "America/Bogota");
 
-    const year = adjustedDate.getFullYear();
-    const startOfYear = new Date(year, 0, 1);
-    const pastDays = Math.floor((adjustedDate.getTime() - startOfYear.getTime()) / 86400000);
-    const week = Math.ceil((pastDays + startOfYear.getDay() + 1) / 7);
+    const year = getISOWeekYear(zonedDate); 
+    const week = getISOWeek(zonedDate);   
 
-    return `${year}-W${week}`;
+    const paddedWeek = String(week).padStart(2, "0");
+    return `${year}-W${paddedWeek}`;
   }
 }
