@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "@/styles/login.css";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
-  const { login, register, token, user } = useAuth();
+  const navigate = useNavigate();
+
+  const [switchState, setSwitchState] = useState(false);
+
+  const { login, register } = useAuth();
 
   const {
     register: registerLogin,
@@ -13,17 +18,20 @@ const Form = () => {
   } = useForm();
 
   const {
+    reset: resetRegister,
     register: registerSignup,
     handleSubmit: handleSignup,
     formState: { errors: signupErrors },
   } = useForm();
 
-  const onLogin = async (data) => {
-    console.log("entre", data);
+  useEffect(() => {
+    console.log("value", switchState);
+  }, [switchState]);
 
+  const onLogin = async (data) => {
     try {
       await login(data.email, data.password);
-      // redirigir o mostrar mensaje
+      navigate("/dashboard");
     } catch (e) {
       console.error(e);
     }
@@ -31,8 +39,13 @@ const Form = () => {
 
   const onSignup = async (data) => {
     try {
-      await register(data.email, data.password);
-      // mostrar éxito o redirigir
+      await register({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      resetRegister();
+      setSwitchState(false);
     } catch (e) {
       console.error(e);
     }
@@ -42,7 +55,14 @@ const Form = () => {
     <div className="wrapper">
       <div className="card-switch">
         <label className="switch">
-          <input type="checkbox" className="toggle" />
+          <input
+            onChange={(e) => {
+              setSwitchState(e.target.checked);
+            }}
+            checked={switchState}
+            type="checkbox"
+            className="toggle"
+          />
           <span className="slider"></span>
           <span className="card-side"></span>
 
@@ -51,43 +71,51 @@ const Form = () => {
             <div className="flip-card__front">
               <div className="title">Log in</div>
               <form
+                autoComplete="off"
                 id="login"
-                className="flip-card__form flex flex-col gap-2"
+                className="flip-card__form flex flex-col gap-1"
                 onSubmit={handleLogin(onLogin)}
               >
-                <input
-                  className={`flip-card__input ${
-                    loginErrors.email ? "border-red-500" : ""
-                  }`}
-                  placeholder="Email"
-                  type="email"
-                  {...registerLogin("email", { required: "Email is required" })}
-                />
-                {loginErrors.email && (
-                  <p className="text-red-500 text-sm -mt-1">
-                    {loginErrors.email.message}
-                  </p>
-                )}
-
-                <input
-                  className={`flip-card__input ${
-                    loginErrors.password ? "border-red-500" : ""
-                  }`}
-                  placeholder="Password"
-                  type="password"
-                  {...registerLogin("password", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
-                    },
-                  })}
-                />
-                {loginErrors.password && (
-                  <p className="text-red-500 text-sm -mt-1">
-                    {loginErrors.password.message}
-                  </p>
-                )}
+                <div className="flex flex-col gap-1 items-start h-16">
+                  <input
+                    className={`flip-card__input ${
+                      loginErrors.email ? "border-red-500" : ""
+                    }`}
+                    placeholder="Email"
+                    type="email"
+                    {...registerLogin("email", {
+                      required: "No dejes este campo vacío.",
+                    })}
+                  />
+                  {loginErrors.email && (
+                    <span className="flex items-center gap-1 text-red-500 text-sm pl-2">
+                      <i className="fas fa-triangle-exclamation" />
+                      {loginErrors.email.message}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1 items-start h-16">
+                  <input
+                    className={`flip-card__input ${
+                      loginErrors.password ? "border-red-500" : ""
+                    }`}
+                    placeholder="Password"
+                    type="password"
+                    {...registerLogin("password", {
+                      required: "No dejes este campo vacío.",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
+                    })}
+                  />
+                  {loginErrors.password && (
+                    <span className="flex items-center gap-1 text-red-500 text-sm pl-2">
+                      <i className="fas fa-triangle-exclamation" />
+                      {loginErrors.password.message}
+                    </span>
+                  )}
+                </div>
 
                 <button type="submit" className="flip-card__btn mt-2">
                   Let's go!
@@ -99,39 +127,69 @@ const Form = () => {
             <div className="flip-card__back">
               <div className="title">Sign up</div>
               <form
+                autoComplete="off"
                 id="signup"
-                className="flip-card__form"
+                className="flip-card__form flex flex-col gap-1"
                 onSubmit={handleSignup(onSignup)}
               >
-                <input
-                  className={`flip-card__input ${
-                    signupErrors.name ? "border-red-500" : ""
-                  }`}
-                  placeholder="Name"
-                  {...registerSignup("name", { required: "Name is required" })}
-                />
-                {signupErrors.name && (
-                  <p className="text-red-500 text-sm -mt-1">
-                    {signupErrors.name.message}
-                  </p>
-                )}
-                <input
-                  className="flip-card__input"
-                  placeholder="Email"
-                  type="email"
-                  {...registerSignup("email", {
-                    required: "Email is required",
-                  })}
-                />
-                <input
-                  className="flip-card__input"
-                  placeholder="Password"
-                  type="password"
-                  {...registerSignup("password", {
-                    required: "Password is required",
-                  })}
-                />
-                <button type="submit" className="flip-card__btn">
+                <div className="flex flex-col gap-1 items-start h-16">
+                  <input
+                    className={`flip-card__input ${
+                      signupErrors.name ? "border-red-500" : ""
+                    }`}
+                    placeholder="Name"
+                    type="text"
+                    {...registerSignup("name", {
+                      required: "No dejes este campo vacío.",
+                    })}
+                  />
+                  {signupErrors.name && (
+                    <span className="flex items-center gap-1 text-red-500 text-sm pl-2">
+                      <i className="fas fa-triangle-exclamation" />
+                      {signupErrors.name.message}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1 items-start h-16">
+                  <input
+                    className={`flip-card__input ${
+                      signupErrors.email ? "border-red-500" : ""
+                    }`}
+                    placeholder="Email"
+                    type="email"
+                    {...registerSignup("email", {
+                      required: "No dejes este campo vacío.",
+                    })}
+                  />
+                  {signupErrors.email && (
+                    <span className="flex items-center gap-1 text-red-500 text-sm pl-2">
+                      <i className="fas fa-triangle-exclamation" />
+                      {signupErrors.email.message}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1 items-start h-16">
+                  <input
+                    className={`flip-card__input ${
+                      signupErrors.password ? "border-red-500" : ""
+                    }`}
+                    placeholder="Password"
+                    type="password"
+                    {...registerSignup("password", {
+                      required: "No dejes este campo vacío.",
+                    })}
+                  />
+                  {signupErrors.password && (
+                    <span className="flex items-center gap-1 text-red-500 text-sm pl-2">
+                      <i className="fas fa-triangle-exclamation" />
+                      {signupErrors.password.message}
+                    </span>
+                  )}
+                </div>
+
+                <button type="submit" className="flip-card__btn mt-2">
                   Confirm!
                 </button>
               </form>

@@ -22,6 +22,10 @@ $ docker-compose up -d
 # abre docker, y escribe en consola
 $ docker start postgres_nest
 
+#comandos para prisma
+$ npx prisma generate
+$ npx prisma migrate dev --name first_migration
+
 # development
 $ npm run start
 ```

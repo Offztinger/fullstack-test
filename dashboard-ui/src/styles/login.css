@@ -121,6 +121,7 @@
   }
   
   .flip-card__front, .flip-card__back {
+    height: 475px;
     padding: 20px;
     position: absolute;
     display: flex;
