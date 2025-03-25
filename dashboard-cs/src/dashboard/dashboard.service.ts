@@ -177,6 +177,46 @@ export class DashboardService {
     return { total, abandoned, abandonment_rate };
   }
 
+  async getFullReport(user_id: string) {
+    const [
+      summary,
+      categoryData,
+      trendData,
+      productivityByDay,
+      completionRate,
+      averageTime,
+      abandonmentRate,
+      tasks
+    ] = await Promise.all([
+      this.getSummary(user_id),
+      this.getTasksByCategory(user_id),
+      this.getWeeklyTrend(user_id),
+      this.getProductivityByDay(user_id),
+      this.getCompletionRate(user_id),
+      this.getAverageCompletionTime(user_id),
+      this.getAbandonmentRate(user_id),
+      this.prisma.tasks.findMany({
+        where: {
+          user_id: user_id,
+          deleted_at: null
+        },
+        orderBy: { created_at: 'desc' },
+      }),
+    ]);
+
+    return {
+      summary,
+      categoryData,
+      trendData,
+      productivityByDay,
+      completionRate,
+      averageTime,
+      abandonmentRate,
+      tasks,
+      generatedAt: new Date().toISOString(),
+    };
+  }
+
   private getISOWeekFormatted(date: Date): string {
     const time = date.getTime() - 5 * 60 * 60 * 1000
     const formattedDate = new Date(time)

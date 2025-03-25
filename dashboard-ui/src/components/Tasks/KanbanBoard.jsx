@@ -1,6 +1,7 @@
 import React from "react";
 import KanbanColumn from "./KanbanColumn";
 import { useTasks } from "@/hooks/useTasks";
+import ExportButton from "./ExportButton";
 
 const STATUSES = ["PENDING", "IN_PROGRESS", "COMPLETED"];
 
@@ -13,12 +14,15 @@ const KanbanBoard = ({ tasks }) => {
 
   return (
     <section className="flex flex-col items-start w-full h-full p-4 gap-4">
-      <button
-        onClick={openModal}
-        className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Crear tarea
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={openModal}
+          className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Crear tarea
+        </button>
+        <ExportButton />
+      </div>
       <div className="h-full w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
         {STATUSES.map((status) => (
           <KanbanColumn key={status} status={status} tasks={tasks[status]} />

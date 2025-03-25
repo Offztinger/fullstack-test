@@ -1,13 +1,23 @@
 // src/dashboard/dashboard.controller.ts
-import { Controller, Get, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Res } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
+import { Response } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @Controller('dashboard')
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
+
+  @Get('export')
+  async exportDashboardData(@Req() req: RequestWithUser, @Res() res: Response) {
+    const data = await this.dashboardService.getFullReport(req.user.id);
+
+    res.setHeader('Content-Disposition', 'attachment; filename="dashboard_report.json"');
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(data, null, 2));
+  }
 
   @Get('summary')
   getSummary(@Req() req: RequestWithUser) {
