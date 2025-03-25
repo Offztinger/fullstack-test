@@ -24,6 +24,7 @@ $ docker start postgres_nest
 
 # comandos para prisma
 $ npx prisma generate
+# ejecutar una migración
 $ npx prisma migrate dev --name first_migration
 
 # development
