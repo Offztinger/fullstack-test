@@ -1,4 +1,3 @@
-// src/components/Kanban/KanbanColumn.tsx
 import { useDroppable } from "@dnd-kit/core";
 import { useTasks } from "@/hooks/useTasks";
 import KanbanTask from "./KanbanTask";

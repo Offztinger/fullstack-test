@@ -1,4 +1,3 @@
-// src/pages/Tasks.tsx
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { useTasks } from "@/hooks/useTasks";
 import KanbanBoard from "@/components/Tasks/KanbanBoard";

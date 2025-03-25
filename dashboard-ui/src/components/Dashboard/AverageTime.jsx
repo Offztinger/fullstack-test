@@ -11,7 +11,7 @@ const AverageTime = ({ data }) => {
 
   const valueToScale = data.averageHours > 0 ? data.averageHours : data.averageMinutes / 60;
 
-  const percentage = Math.min(valueToScale * 10, 100); // Escalado visual
+  const percentage = Math.min(valueToScale * 10, 100); 
 
   const chartData = [
     { name: "Tiempo", value: percentage },

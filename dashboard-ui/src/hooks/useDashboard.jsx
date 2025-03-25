@@ -1,4 +1,3 @@
-// src/hooks/useDashboard.ts
 import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
 import { useDashboardStore } from "../store/useDashboardStore";
@@ -44,9 +43,9 @@ export const useDashboard = () => {
       throw new Error(`Error fetching ${endpoint}`);
     }
 
-    const text = await res.text(); // ← Intentamos obtener el texto de respuesta
+    const text = await res.text(); 
 
-    if (!text) return null; // ← Si está vacío, retornamos null
+    if (!text) return null;
 
     try {
       return JSON.parse(text);

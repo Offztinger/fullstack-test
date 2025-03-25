@@ -1,4 +1,3 @@
-// src/components/Dashboard/DashboardSkeleton.tsx
 const SkeletonBox = ({ className = "" }) => (
   <div className={`bg-gray-200 rounded-md animate-pulse ${className}`} />
 );
