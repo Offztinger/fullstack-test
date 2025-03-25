@@ -4,15 +4,7 @@ import { useEffect } from "react";
 
 export const useTasks = () => {
   const { token } = useAuth();
-  const {
-    tasks,
-    setTasks,
-    showModal,
-    taskToModify,
-    setTaskToModify,
-    setShowModal,
-    closeModal,
-  } = useTasksStore();
+  const { tasks, setTasks, modal, setModal, closeModal } = useTasksStore();
 
   const fetchTasks = async () => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
@@ -84,10 +76,8 @@ export const useTasks = () => {
     createTask,
     updateTask,
     deleteTask,
-    showModal,
-    taskToModify,
-    setTaskToModify,
-    setShowModal,
+    modal,
+    setModal,
     closeModal,
   };
 };

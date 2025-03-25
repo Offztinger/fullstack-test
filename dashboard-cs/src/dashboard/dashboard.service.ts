@@ -73,7 +73,6 @@ export class DashboardService {
     );
   }
 
-
   async getProductivityByDay(user_id: string) {
     const tasks = await this.prisma.tasks.findMany({
       where: {
@@ -98,8 +97,8 @@ export class DashboardService {
     };
 
     for (const task of tasks) {
-      const adjustedDate = new Date(task.completed_at!.getTime() + 5 * 60 * 60 * 1000);
-      const dayIndex = adjustedDate.getDay();
+      if (!task.completed_at) continue;
+      const dayIndex = task.completed_at.getDay();
       const dayName = [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
       ][dayIndex];
@@ -108,7 +107,6 @@ export class DashboardService {
 
     return dayCounts;
   }
-
 
   async getAverageCompletionTime(user_id: string) {
     const tasks = await this.prisma.tasks.findMany({
@@ -155,23 +153,34 @@ export class DashboardService {
   }
 
   async getAbandonmentRate(user_id: string) {
-    const total = await this.prisma.tasks.count({ where: { user_id } });
+    const total = await this.prisma.tasks.count({
+      where: {
+        user_id,
+        status: { in: ['PENDING', 'IN_PROGRESS'] },
+        completed_at: null,
+      },
+    });
+
     const abandoned = await this.prisma.tasks.count({
       where: {
         user_id,
         deleted_at: { not: null },
         status: { in: ['PENDING', 'IN_PROGRESS'] },
+        completed_at: null,
       },
     });
 
     if (total === 0) return null;
 
-    const abandonment_rate = total > 0 ? Number(((abandoned / total) * 100).toFixed(2)) : 0;
+    const abandonment_rate = Number(((abandoned / total) * 100).toFixed(2));
+
     return { total, abandoned, abandonment_rate };
   }
 
   private getISOWeekFormatted(date: Date): string {
-    const zonedDate = toZonedTime(date, "America/Bogota");
+    const time = date.getTime() - 5 * 60 * 60 * 1000
+    const formattedDate = new Date(time)
+    const zonedDate = toZonedTime(formattedDate, "America/Bogota");
 
     const year = getISOWeekYear(zonedDate);
     const week = getISOWeek(zonedDate);

@@ -1,7 +1,7 @@
 // src/components/Kanban/KanbanColumn.tsx
 import { useDroppable } from "@dnd-kit/core";
+import { useTasks } from "@/hooks/useTasks";
 import KanbanTask from "./KanbanTask";
-import useTasks from "@/hooks/useTasks";
 
 const statusTitles = {
   PENDING: "Pendientes",
@@ -11,16 +11,14 @@ const statusTitles = {
 
 const KanbanColumn = ({ status, tasks }) => {
   const { setNodeRef } = useDroppable({ id: status });
-  const { setShowModal, setTaskToModify } = useTasks();
+  const { setModal } = useTasks();
 
   const onEdit = async (task) => {
-    setTaskToModify(task);
-    setShowModal(true, "edit");
+    setModal(true, task, "edit");
   };
 
   const onDelete = async (task) => {
-    setTaskToModify(task);
-    setShowModal(true, "delete");
+    setModal(true, task, "delete");
   };
 
   return (

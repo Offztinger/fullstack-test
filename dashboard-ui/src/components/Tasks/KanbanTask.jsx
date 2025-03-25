@@ -1,14 +1,16 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useAuth } from "@/hooks/useAuth";
 import { useMemo } from "react";
+import { CATEGORY, STATUS } from "../../utils/handler";
 
 const KanbanTask = ({ task, onEdit, onDelete }) => {
   const { user } = useAuth();
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: task.id,
-    data: { task },
-  });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: task.id,
+      data: { task },
+    });
 
   const style = useMemo(() => {
     return {
@@ -27,7 +29,6 @@ const KanbanTask = ({ task, onEdit, onDelete }) => {
       style={style}
       className="bg-white border rounded-xl shadow-sm hover:shadow-md p-3 transition-shadow flex flex-col gap-3 relative"
     >
-
       <div
         {...listeners}
         {...attributes}
@@ -37,18 +38,18 @@ const KanbanTask = ({ task, onEdit, onDelete }) => {
         <i className="fas fa-grip-lines" />
       </div>
 
-      <div className="flex justify-between items-start pl-6">
+      <div className="flex justify-between items-start pl-6 cursor-default">
         <h3 className="text-sm font-semibold text-gray-800">{task.title}</h3>
         <div className="flex gap-2">
           <button
-            className="text-blue-500 hover:text-blue-700"
+            className="text-blue-500 hover:text-blue-700 cursor-pointer"
             onClick={() => onEdit(task)}
             title="Editar"
           >
             <i className="fas fa-pen" />
           </button>
           <button
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
             onClick={() => onDelete(task)}
             title="Eliminar"
           >
@@ -57,13 +58,17 @@ const KanbanTask = ({ task, onEdit, onDelete }) => {
         </div>
       </div>
 
-      <div className="pl-6">
-        <span className="bg-gray-200 text-gray-800 text-xs px-2 py-0.5 rounded-full font-medium">
-          {task.status.replace("_", " ")}
+      <div className="flex lg:flex-col xl:flex-row gap-2 pl-6 cursor-default">
+        <span className="bg-indigo-200 w-fit xl:w-auto text-gray-800 text-xs px-2 py-0.5 rounded-full font-medium">
+          {STATUS[task.status]}
+        </span>
+
+        <span className="bg-amber-200 w-fit xl:w-auto text-gray-800 text-xs px-2 py-0.5 rounded-full font-medium">
+          {CATEGORY[task.category]}
         </span>
       </div>
 
-      <div className="flex items-center gap-2 text-xs text-gray-500 pl-6">
+      <div className="flex items-center gap-2 text-xs text-gray-500 pl-6 cursor-default">
         <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
           {user?.name?.slice(0, 2).toUpperCase() || "US"}
         </div>

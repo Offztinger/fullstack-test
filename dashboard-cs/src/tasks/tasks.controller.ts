@@ -37,11 +37,6 @@ export class TasksController {
     return this.tasksService.updateStatus(id, body.status);
   }
 
-  @Patch(':id/complete')
-  markAsCompleted(@Param('id') id: string) {
-    return this.tasksService.markAsCompleted(id);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.tasksService.remove(id);

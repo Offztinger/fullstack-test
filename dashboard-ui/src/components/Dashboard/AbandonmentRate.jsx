@@ -32,7 +32,7 @@ const AbandonmentRate = ({ data }) => {
       <p className="text-sm text-center font-semibold text-gray-600 mt-2">
         De {data.total} tareas,{" "}
         {data.abandoned !== 0
-          ? `${data.abandoned} fueron abandonadas sin completarse`
+          ? `${data.abandoned} fue abandonada sin completarse`
           : "ninguna fue abandonada"}
       </p>
     </MetricCard>

@@ -13,6 +13,7 @@ export class TasksService {
       data: {
         title: dto.title,
         description: dto.description,
+        category: dto.category,
         status: dto.status,
         user: {
           connect: { id: user_id },
@@ -48,16 +49,6 @@ export class TasksService {
       data: {
         status,
         completed_at: status === 'COMPLETED' ? new Date() : null,
-      },
-    });
-  }
-
-  async markAsCompleted(id: string) {
-    return this.prisma.tasks.update({
-      where: { id: id, deleted_at: null },
-      data: {
-        status: 'COMPLETED',
-        completed_at: new Date(),
       },
     });
   }

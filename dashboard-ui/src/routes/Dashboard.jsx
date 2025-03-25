@@ -25,13 +25,13 @@ const Dashboard = () => {
 
   return (
     <section className="w-full h-full flex gap-8 flex-col">
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid xl:grid-cols-2 gap-8">
         <SummaryCard data={summary} />
         <CategoryAverage data={categoryData} />
         <WeeklyTrend data={trendData} />
         <ProductivityByDay data={productivityByDay} />
       </div>
-      <div className="grid grid-cols-3 gap-8 pb-6">
+      <div className="grid xl:grid-cols-3 gap-8 pb-6">
         <CompletionRate data={completionRate} />
         <AverageTime data={averageTime} />
         <AbandonmentRate data={abandonmentRate} />

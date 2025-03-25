@@ -2,25 +2,26 @@ import { create } from "zustand";
 
 export const useTasksStore = create((set) => ({
   tasks: [],
-  showModal: { state: false, type: null },
-  taskToModify: null,
+  modal: { open: false, data: null, type: null },
 
-  setTaskToModify: (task) => set({ taskToModify: task }),
-
-  setShowModal: (state, type = null) =>
+  setModal: (open, data, type = null) => {
     set({
-      showModal: {
-        state,
+      modal: {
+        open,
+        data,
         type,
       },
-    }),
+    });
+  },
 
   closeModal: () =>
     set({
-      showModal: {
-        state: false,
+      modal: {
+        open: false,
+        data: null,
         type: null,
       },
     }),
+
   setTasks: (tasks) => set({ tasks }),
 }));
