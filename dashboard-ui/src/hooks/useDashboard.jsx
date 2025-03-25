@@ -26,6 +26,10 @@ export const useDashboard = () => {
     setCompletionRate,
     setAverageTime,
     setAbandonmentRate,
+    filters,
+    modal,
+    setFilter,
+    setModal,
   } = useDashboardStore();
 
   const fetchWithAuth = async (endpoint) => {
@@ -126,5 +130,9 @@ export const useDashboard = () => {
     averageTime,
     abandonmentRate,
     loading,
+    filters,
+    modal,
+    setFilter,
+    setModal,
   };
 };

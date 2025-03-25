@@ -7,6 +7,7 @@ import CompletionRate from "@/components/Dashboard/CompletionRate";
 import AverageTime from "@/components/Dashboard/AverageTime";
 import AbandonmentRate from "@/components/Dashboard/AbandonmentRate";
 import DashboardSkeleton from "@/components/Dashboard/DashboardSkeleton";
+import FilterModal from "@/components/Dashboard/FilterModal";
 import "@/styles/dashboard.css";
 
 const Dashboard = () => {
@@ -19,22 +20,28 @@ const Dashboard = () => {
     averageTime,
     abandonmentRate,
     loading,
+    filters,
+    modal,
+    setModal,
   } = useDashboard();
 
   if (loading) return <DashboardSkeleton />;
 
   return (
     <section className="w-full h-full flex gap-8 flex-col">
+      {modal && <FilterModal onClose={() => setModal(false)} />}
       <div className="grid xl:grid-cols-2 gap-8">
-        <SummaryCard data={summary} />
-        <CategoryAverage data={categoryData} />
-        <WeeklyTrend data={trendData} />
-        <ProductivityByDay data={productivityByDay} />
+        {filters.summary && <SummaryCard data={summary} />}
+        {filters.categoryAverage && <CategoryAverage data={categoryData} />}
+        {filters.weeklyTrend && <WeeklyTrend data={trendData} />}
+        {filters.productivityByDay && (
+          <ProductivityByDay data={productivityByDay} />
+        )}
       </div>
       <div className="grid xl:grid-cols-3 gap-8 pb-6">
-        <CompletionRate data={completionRate} />
-        <AverageTime data={averageTime} />
-        <AbandonmentRate data={abandonmentRate} />
+        {filters.completionRate && <CompletionRate data={completionRate} />}
+        {filters.averageTime && <AverageTime data={averageTime} />}
+        {filters.abandonmentRate && <AbandonmentRate data={abandonmentRate} />}
       </div>
     </section>
   );

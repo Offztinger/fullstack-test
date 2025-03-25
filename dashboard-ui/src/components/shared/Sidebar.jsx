@@ -1,10 +1,12 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useDashboard } from "@/hooks/useDashboard";
 
 const Sidebar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { pathname } = useLocation(); // 👈 obtenemos la ruta actual
+  const { setModal } = useDashboard();
+  const { pathname } = useLocation();
 
   const handleLogout = () => {
     logout();
@@ -20,7 +22,16 @@ const Sidebar = () => {
   return (
     <div className="w-64 h-screen bg-white shadow-md shadow-purple-200/50 flex flex-col justify-between p-5">
       <div className="flex flex-col gap-6">
-        <div className="flex items-center gap-4 p-3 cursor-default">
+        <div
+          onClick={() => {
+            pathname === "/dashboard" && setModal(true);
+          }}
+          className={`flex items-center gap-4 p-3 ${
+            pathname === "/dashboard"
+              ? "hover:bg-gray-300/80 cursor-pointer"
+              : "cursor-default"
+          } rounded  transition-all`}
+        >
           <i className="fas fa-user-circle text-3xl text-[#2d7cf0]" />
           <div>
             <p className="font-semibold text-base text-gray-800">
