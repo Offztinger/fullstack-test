@@ -4,7 +4,14 @@ import MetricCard from "@/components/shared/MetricCard";
 const AverageTime = ({ data }) => {
   if (!data) return null;
 
-  const percentage = Math.min(data.averageHours * 10, 100); // Escalado para visual
+  const displayValue =
+    data.averageHours > 0
+      ? `${data.averageHours.toFixed(1)} h`
+      : `${data.averageMinutes} min`;
+
+  const valueToScale = data.averageHours > 0 ? data.averageHours : data.averageMinutes / 60;
+
+  const percentage = Math.min(valueToScale * 10, 100); // Escalado visual
 
   const chartData = [
     { name: "Tiempo", value: percentage },
@@ -28,7 +35,7 @@ const AverageTime = ({ data }) => {
           </Pie>
         </PieChart>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-[#2196F3] font-bold text-xl">
-          {data.averageHours.toFixed(1)}h
+          {displayValue}
         </div>
       </div>
       <p className="text-sm text-center font-semibold text-gray-600 mt-2">

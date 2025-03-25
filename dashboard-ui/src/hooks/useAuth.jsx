@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 const TOKEN_KEY = "AUTH_TOKEN";
 const EXPIRATION_KEY = "EXPIRATION_TOKEN";
+const DASHBOARD_FILTERS = "DASHBOARD_FILTERS";
 
 export const useAuth = () => {
   const url = import.meta.env.VITE_BACKEND_URL;
@@ -59,6 +60,7 @@ export const useAuth = () => {
   const logout = () => {
     zustandLogout();
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(DASHBOARD_FILTERS);
     setCookie(EXPIRATION_KEY, "true");
   };
 

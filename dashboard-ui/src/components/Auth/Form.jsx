@@ -173,12 +173,13 @@ const Form = () => {
                       required: "No dejes este campo vacío.",
                       minLength: {
                         value: 6,
-                        message: "Password must be at least 6 characters",
+                        message:
+                          "La contraseña debe tener minimo 6 caracteres.",
                       },
                     })}
                   />
                   {signupErrors.password && (
-                    <span className="flex items-center gap-1 text-red-500 text-sm pl-2">
+                    <span className="flex items-center text-left gap-1 text-red-500 text-sm pl-2">
                       <i className="fas fa-triangle-exclamation" />
                       {signupErrors.password.message}
                     </span>

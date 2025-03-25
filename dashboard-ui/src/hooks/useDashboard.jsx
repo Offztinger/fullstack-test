@@ -82,6 +82,7 @@ export const useDashboard = () => {
           setLoading(false);
         }, 1000);
       } else {
+        toast.remove();
         toast.error("Crea tu primera tarea para ver dashboard!");
         throw new Error("No hay datos para mostrar");
       }
